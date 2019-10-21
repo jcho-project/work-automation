@@ -1,15 +1,64 @@
-// Move the mouse across the screen as a sine wave.
 var robot = require("robotjs");
 
-// Speed up the mouse.
-robot.setMouseDelay(2);
 
-var twoPI = Math.PI * 2.0;
-var screenSize = robot.getScreenSize();
-var height = (screenSize.height / 2) - 10;
-var width = screenSize.width;
+const mousePosition = robot.getMousePos(),
+  addressBarPos = { x: 203, y: 38 },
+  usernamePos = { x: 944, y: 398 },
+  passwordPos = { x: 944, y: 418 },
+  securityPos = { x: 944, y: 528 },
+  firstPopup = { x: 952, y: 526 },
+  secondPopup = { x: 564, y: 14 },
+  thirdPopup = { x: 638, y: 723 };
 
-for (var x = 0; x < width; x++) {
-  y = height * Math.sin((twoPI * x) / width) + height;
-  robot.moveMouse(x, y);
+console.log(mousePosition);
+
+// { width: 1536, height: 864 }
+
+robot.setMouseDelay(4000);
+
+function openIE() {
+  robot.moveMouse(24, 843);
+  robot.mouseClick();
+  robot.typeString("Internet Explorer");
+  robot.keyTap("enter");
 }
+
+function openVPN() {
+  robot.moveMouse(addressBarPos.x, addressBarPos.y);
+  robot.mouseClick();
+  robot.typeString("eicvpn.lge.com");
+  robot.keyTap("enter");
+}
+
+function closePopups() {
+  // Close All Popups
+  // First Popup
+  robot.moveMouse(firstPopup.x, firstPopup.y);
+  robot.mouseClick();
+
+  // Second Popup
+  robot.moveMouse(secondPopup.x, secondPopup.y);
+  robot.mouseClick();
+
+  // Third Popup
+  robot.moveMouse(thirdPopup.x, thirdPopup.y);
+  robot.mouseClick();
+}
+
+function login() {
+  // Username
+  robot.moveMouse(usernamePos.x, usernamePos.y);
+  robot.typeString("lge/junehyok.cho");
+
+  // Password
+  robot.moveMouse(passwordPos.x, passwordPos.y);
+  robot.typeString("Dayeahn0220@0");
+
+  // Security Code
+  robot.moveMouse(securityPos.x, securityPos.y);
+}
+
+openIE();
+openVPN();
+closePopups();
+login();
