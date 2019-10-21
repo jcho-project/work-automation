@@ -1,0 +1,22 @@
+{
+  "name": "work-automation",
+  "version": "1.0.0",
+  "description": "GERP Task Automation",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jcho-project/work-automation.git"
+  },
+  "author": "June Hyok Cho",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jcho-project/work-automation/issues"
+  },
+  "homepage": "https://github.com/jcho-project/work-automation#readme",
+  "dependencies": {
+    "robotjs": "^0.5.1"
+  }
+}
