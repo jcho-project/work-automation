@@ -1,68 +1,5 @@
 var robot = require("robotjs");
 
-
-// const mousePosition = robot.getMousePos(),
-//   addressBarPos = { x: 203, y: 38 },
-//   usernamePos = { x: 944, y: 398 },
-//   passwordPos = { x: 944, y: 418 },
-//   securityPos = { x: 944, y: 528 },
-//   firstPopup = { x: 952, y: 526 },
-//   secondPopup = { x: 564, y: 14 },
-//   thirdPopup = { x: 638, y: 723 };
-
-// console.log(mousePosition);
-
-// // { width: 1536, height: 864 }
-
-// robot.setMouseDelay(4000);
-
-// function openIE() {
-//   robot.moveMouse(24, 843);
-//   robot.mouseClick();
-//   robot.typeString("Internet Explorer");
-//   robot.keyTap("enter");
-// }
-
-// function openVPN() {
-//   robot.moveMouse(addressBarPos.x, addressBarPos.y);
-//   robot.mouseClick();
-//   robot.typeString("eicvpn.lge.com");
-//   robot.keyTap("enter");
-// }
-
-// function closePopups() {
-//   // Close All Popups
-//   // First Popup
-//   robot.moveMouse(firstPopup.x, firstPopup.y);
-//   robot.mouseClick();
-
-//   // Second Popup
-//   robot.moveMouse(secondPopup.x, secondPopup.y);
-//   robot.mouseClick();
-
-//   // Third Popup
-//   robot.moveMouse(thirdPopup.x, thirdPopup.y);
-//   robot.mouseClick();
-// }
-
-// function login() {
-//   // Username
-//   robot.moveMouse(usernamePos.x, usernamePos.y);
-//   robot.typeString("lge/junehyok.cho");
-
-//   // Password
-//   robot.moveMouse(passwordPos.x, passwordPos.y);
-//   robot.typeString("Dayeahn0220@0");
-
-//   // Security Code
-//   robot.moveMouse(securityPos.x, securityPos.y);
-// }
-
-// openIE();
-// openVPN();
-// closePopups();
-// login();
-
 const mousePosition = robot.getMousePos();
 
 const rightScreen = { x: 1901, y: 18 },
@@ -77,7 +14,8 @@ const rightScreen = { x: 1901, y: 18 },
   ok = { x: 1712, y: 551 },
   currency = { x: 1448, y: 541 },
   orderDate = { x: 1940, y: 562 },
-  exportLocation = { x: 1324, y: 199 };
+  exportLocation = { x: 1324, y: 199 },
+  yes = { x: 1352, y: 598 };
 
 
 robot.setKeyboardDelay(1000);
@@ -160,21 +98,57 @@ async function currencyAndDate() {
 }
 
 async function exportSO() {
+  // await currencyAndDate();
+  // Export found Sales Order
   robot.moveMouse(exportLocation.x, exportLocation.y);
   robot.mouseClick();
   robot.keyTap("alt");
   robot.keyTap("f");
   robot.keyTap("e");
-  setTimeout(function enter() {
+  setTimeout(function () {
     robot.keyTap("enter");
-  }, 5000);
+  }, 3000);
 }
 
+async function excelFormat() {
+  await exportSO();
+
+  setTimeout(function () {
+    robot.moveMouse(yes.x, yes.y);
+    robot.mouseClick();
+  }, 10000)
+
+  setTimeout(function () {
+    robot.keyToggle("control", "down");
+    robot.keyTap("q");
+    robot.keyToggle("control", "up");
+
+    robot.keyToggle("command", "down");
+    robot.keyTap("right");
+    robot.keyToggle("command", "up");
+
+    robot.moveMouse(rightScreen.x, rightScreen.y);
+    robot.mouseClick();
+  }, 13000)
+}
+
+async function excelSave() {
+  await excelFormat();
+
+  robot.keyTap("alt")
+  robot.keyTap("f")
+  robot.keyTap("a")
+  robot.keyTap("c")
+  robot.keyTap("7")
+}
 
 console.log(mousePosition);
 
 // resetScreen();
 // openSalesOrder();
 // searchModel();
-currencyAndDate()
-  .then(exportSO());
+// currencyAndDate();
+// exportSO();
+// excelFormat();
+excelSave();
+
