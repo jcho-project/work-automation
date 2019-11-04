@@ -1,9 +1,6 @@
 var robot = require("robotjs");
 
-const mousePosition = robot.getMousePos();
-
 const rightScreen = { x: 1901, y: 18 },
-  leftScreen = { x: 783, y: 18 },
   modelCategory = { x: 1383, y: 468 },
   mwo = { x: 1316, y: 469 },
   rac = { x: 1316, y: 398 },
@@ -15,9 +12,10 @@ const rightScreen = { x: 1901, y: 18 },
   currency = { x: 1448, y: 541 },
   orderDate = { x: 1940, y: 562 },
   exportLocation = { x: 1324, y: 199 },
-  yes = { x: 1352, y: 598 };
+  yes = { x: 1352, y: 598 },
+  saveAsType = { x: 1471, y: 444 };
 
-
+// Initialze Keyboard and Mouse Delay Speed
 robot.setKeyboardDelay(1000);
 robot.setMouseDelay(1000);
 
@@ -31,6 +29,7 @@ lastYear.setFullYear(today.getFullYear() - 1);
 let formattedDate = lastYear.toLocaleDateString().split("/");
 formattedDate = [formattedDate[1], formattedDate[0], formattedDate[2]].join("-")
 
+// Reset Screen Focus in GERP to Navigation Menu
 function resetScreen() {
   robot.moveMouse(rightScreen.x, rightScreen.y);
   robot.mouseClick();
@@ -39,6 +38,7 @@ function resetScreen() {
   robot.keyTap("1");
 }
 
+// Open Sales Order Inquiry (snapshot)
 function openSalesOrder() {
   robot.keyToggle("control", "down");
   robot.keyTap("l");
@@ -49,6 +49,7 @@ function openSalesOrder() {
   robot.keyTap("enter");
 }
 
+// Search Model Category for Search
 function searchModel() {
   // Click Model Category
   robot.moveMouse(modelCategory.x, modelCategory.y);
@@ -80,7 +81,8 @@ function searchModel() {
   robot.mouseClick();
 }
 
-async function currencyAndDate() {
+// Enter Currency and Date Frame for Search
+function currencyAndDate() {
   // Click and Change Currency to CHF
   robot.moveMouse(currency.x, currency.y);
   robot.mouseClick();
@@ -94,31 +96,36 @@ async function currencyAndDate() {
   // Find
   robot.keyToggle("alt", "down");
   robot.keyTap("i");
-  robot.keyToggle("control", "up");
+  robot.keyToggle("alt", "up");
 }
 
+// Export Retrieved Search Result as Excel
 async function exportSO() {
-  // await currencyAndDate();
-  // Export found Sales Order
-  robot.moveMouse(exportLocation.x, exportLocation.y);
-  robot.mouseClick();
-  robot.keyTap("alt");
-  robot.keyTap("f");
-  robot.keyTap("e");
   setTimeout(function () {
-    robot.keyTap("enter");
-  }, 3000);
+    // Export found Sales Order
+    robot.moveMouse(exportLocation.x, exportLocation.y);
+    robot.mouseClick();
+    robot.keyTap("alt");
+    robot.keyTap("f");
+    robot.keyTap("e");
+  }, 15000)
 }
 
+// Run Macro and Format Excel File
 async function excelFormat() {
-  await exportSO();
+  setTimeout(function () {
+    // Export Open
+    robot.keyTap("enter");
+  }, 25000);
 
   setTimeout(function () {
+    // File Security Popup Click
     robot.moveMouse(yes.x, yes.y);
     robot.mouseClick();
-  }, 10000)
+  }, 40000)
 
   setTimeout(function () {
+    // Format Excel File using Macro and Move to Right
     robot.keyToggle("control", "down");
     robot.keyTap("q");
     robot.keyToggle("control", "up");
@@ -126,29 +133,61 @@ async function excelFormat() {
     robot.keyToggle("command", "down");
     robot.keyTap("right");
     robot.keyToggle("command", "up");
+  }, 45000)
+}
 
+// Navigate and Save to specified Directory
+async function excelSave() {
+  setTimeout(function () {
+    // Initialize Focus
     robot.moveMouse(rightScreen.x, rightScreen.y);
     robot.mouseClick();
-  }, 13000)
+
+    // Navigate to Save As -> Browse
+    robot.keyTap("alt")
+    robot.keyTap("f")
+    robot.keyTap("a")
+    robot.keyTap("c")
+    robot.keyTap("b")
+
+    // Title of the Save File
+    robot.typeString(today.getFullYear().toString() + today.getMonth().toString() + today.getDay().toString() + "_Main")
+
+    // Save As File Type
+    robot.keyTap("tab")
+
+    robot.keyToggle("alt", "down");
+    robot.keyTap("down");
+    robot.keyToggle("alt", "up");
+
+    robot.moveMouse(saveAsType.x, saveAsType.y);
+    robot.mouseClick();
+
+    // Navigate to the Save File Directory Address
+    robot.keyToggle("alt", "down");
+    robot.keyTap("d");
+    robot.keyToggle("alt", "up");
+
+    robot.typeString("Y:\\Logistik\\Zoll (neu)\\Swiss\\Swiss HA\\Download Test")
+    robot.keyTap("enter");
+
+    // Save and Exit File
+    robot.keyToggle("alt", "down");
+    robot.keyTap("s");
+    robot.keyToggle("alt", "up");
+
+    robot.keyToggle("alt", "down");
+    robot.keyTap("f4");
+    robot.keyToggle("alt", "up");
+  }, 55000)
 }
 
-async function excelSave() {
-  await excelFormat();
-
-  robot.keyTap("alt")
-  robot.keyTap("f")
-  robot.keyTap("a")
-  robot.keyTap("c")
-  robot.keyTap("7")
+async function execute() {
+  await Promise.all([exportSO(), excelFormat(), excelSave()]);
 }
 
-console.log(mousePosition);
-
-// resetScreen();
-// openSalesOrder();
-// searchModel();
-// currencyAndDate();
-// exportSO();
-// excelFormat();
-excelSave();
-
+resetScreen();
+openSalesOrder();
+searchModel();
+currencyAndDate();
+execute();
