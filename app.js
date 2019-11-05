@@ -101,6 +101,9 @@ function currencyAndDate() {
 
 // Export Retrieved Search Result as Excel
 async function exportSO() {
+  robot.moveMouse(rightScreen.x, rightScreen.y);
+  robot.mouseClick();
+
   setTimeout(function () {
     // Export found Sales Order
     robot.moveMouse(exportLocation.x, exportLocation.y);
@@ -108,7 +111,7 @@ async function exportSO() {
     robot.keyTap("alt");
     robot.keyTap("f");
     robot.keyTap("e");
-  }, 15000)
+  }, 5000)
 }
 
 // Run Macro and Format Excel File
@@ -116,13 +119,13 @@ async function excelFormat() {
   setTimeout(function () {
     // Export Open
     robot.keyTap("enter");
-  }, 25000);
+  }, 15000);
 
   setTimeout(function () {
     // File Security Popup Click
     robot.moveMouse(yes.x, yes.y);
     robot.mouseClick();
-  }, 40000)
+  }, 30000)
 
   setTimeout(function () {
     // Format Excel File using Macro and Move to Right
@@ -133,7 +136,7 @@ async function excelFormat() {
     robot.keyToggle("command", "down");
     robot.keyTap("right");
     robot.keyToggle("command", "up");
-  }, 45000)
+  }, 35000)
 }
 
 // Navigate and Save to specified Directory
@@ -179,15 +182,19 @@ async function excelSave() {
     robot.keyToggle("alt", "down");
     robot.keyTap("f4");
     robot.keyToggle("alt", "up");
-  }, 55000)
+  }, 45000)
 }
 
 async function execute() {
   await Promise.all([exportSO(), excelFormat(), excelSave()]);
 }
 
-resetScreen();
-openSalesOrder();
-searchModel();
-currencyAndDate();
+function initialSearch() {
+  resetScreen();
+  openSalesOrder();
+  searchModel();
+  currencyAndDate();
+}
+
+// initialSearch();
 execute();
