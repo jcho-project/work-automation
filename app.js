@@ -26,8 +26,11 @@ let lastYear = new Date();
 lastYear.setDate(today.getDate() + 1);
 lastYear.setFullYear(today.getFullYear() - 1);
 
+let formattedToday = today.toLocaleDateString().split("/");
+formattedToday = [formattedToday[2], (formattedToday[0] > 9 ? "" : "0") + formattedToday[0], (formattedToday[1] > 9 ? "" : "0") + formattedToday[1]].join("");
+
 let formattedDate = lastYear.toLocaleDateString().split("/");
-formattedDate = [formattedDate[1], formattedDate[0], formattedDate[2]].join("-")
+formattedDate = [(formattedToday[1] > 9 ? "" : "0") + formattedDate[1], (formattedToday[0] > 9 ? "" : "0") + formattedDate[0], formattedDate[2]].join("-")
 
 // Reset Screen Focus in GERP to Navigation Menu
 function resetScreen() {
@@ -154,7 +157,7 @@ async function excelSave() {
     robot.keyTap("b")
 
     // Title of the Save File
-    robot.typeString(today.getFullYear().toString() + today.getMonth().toString() + today.getDay().toString() + "_Main")
+    robot.typeString(formattedToday + "_Main")
 
     // Save As File Type
     robot.keyTap("tab")

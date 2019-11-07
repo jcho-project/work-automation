@@ -14,6 +14,9 @@ robot.setMouseDelay(1000);
 // Get Date of Today
 let today = new Date();
 
+let formattedToday = today.toLocaleDateString().split("/");
+formattedToday = [formattedToday[2], (formattedToday[0] > 9 ? "" : "0") + formattedToday[0], (formattedToday[1] > 9 ? "" : "0") + formattedToday[1]].join("");
+
 // Reset Screen Focus in GERP to Navigation Menu
 function resetScreen() {
   robot.moveMouse(rightScreen.x, rightScreen.y);
@@ -109,7 +112,7 @@ function excelSave(invOrg) {
     robot.keyTap("b")
 
     // Title of the Save File
-    robot.typeString(today.getFullYear().toString() + today.getMonth().toString() + today.getDay().toString() + "_" + invOrg)
+    robot.typeString(formattedToday + "_" + invOrg)
 
     // Save As File Type
     robot.keyTap("tab")

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/jcho-project/work-automation#readme",
   "dependencies": {
-    "robotjs": "^0.5.1"
+    "robotjs": "^0.5.1",
+    "xlsx": "^0.15.1"
   }
 }
