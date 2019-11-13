@@ -1,6 +1,10 @@
 const robot = require("robotjs");
 const XLSX = require("xlsx");
-const exec = require("child_process");
+const { exec } = require("child_process");
+// const { spawn } = require("child_process");
+const execFile = require("child_process").execFile;
+
+// spawn("git", ["log", "--pretty=oneline"]).stdout.pipe(process.stdout)
 
 // --------------------------------------------
 // Required Date Formats
@@ -35,7 +39,7 @@ const rawE3X = "Y:\\Logistik\\Zoll (neu)\\Swiss\\Swiss HA\\Download Test\\" + fo
 // console.log(originalDataDir);
 // console.log(rawDataDir);
 // console.log(previous);
-// console.log(current) ;
+// console.log(current);
 // console.log(rawMain);
 // console.log(rawE15);
 // console.log(rawE3X);
@@ -51,34 +55,43 @@ const rawE3X = "Y:\\Logistik\\Zoll (neu)\\Swiss\\Swiss HA\\Download Test\\" + fo
 // let desired_value = (desired_cell ? desired_cell.v : undefined);
 
 // console.log(desired_value)
-
-const child = exec.exec(previous, (error, stdout, stderr) => {
-  if (error) {
-    throw error;
-  }
-  robot.keyToggle("command", "down");
-  robot.keyTap("right");
-  robot.keyToggle("command", "up");
-
-  robot.keyToggle("control", "down");
-  robot.keyTap("up");
-  robot.keyToggle("control", "up");
-  robot.keyToggle("control", "down");
-  robot.keyTap("left");
-  robot.keyToggle("control", "up");
-
-  robot.keyTap("down");
-  robot.keyToggle("shift", "down");
-  robot.keyTap("space");
-  robot.keyToggle("shift", "up");
-
-  robot.keyToggle("shift", "down");
-  robot.keyToggle("control", "down");
-  robot.keyTap("down");
-  robot.keyToggle("shift", "up");
-  robot.keyToggle("control", "up");
-
+// "C:\\Users\\junehyok.cho\\Desktop\\HA_20191112.xlsm"
+const child = exec("C:\\Users\\junehyok.cho\\Desktop\\HA_20191112.xlsm", [], (error, stdout, stderr) => {
+  if (error) return console.log(error)
+  console.log(stdout);
 })
+
+function format() {
+  setTimeout(function () {
+    robot.keyToggle("command", "down");
+    robot.keyTap("up");
+    robot.keyToggle("command", "up");
+    robot.keyToggle("command", "down");
+    robot.keyTap("right");
+    robot.keyToggle("command", "up");
+    robot.keyToggle("command", "down");
+    robot.keyTap("down");
+    robot.keyToggle("command", "up");
+
+    robot.keyToggle("control", "down");
+    robot.keyTap("up");
+    robot.keyToggle("control", "up");
+    robot.keyToggle("control", "down");
+    robot.keyTap("left");
+    robot.keyToggle("control", "up");
+
+    robot.keyTap("down");
+    robot.keyToggle("shift", "down");
+    robot.keyTap("space");
+    robot.keyToggle("shift", "up");
+
+    robot.keyToggle("shift", "down");
+    robot.keyToggle("control", "down");
+    robot.keyTap("down");
+    robot.keyToggle("shift", "up");
+    robot.keyToggle("control", "up");
+  }, 10000)
+}
 
 
 // child.on("close", (code, signal) => {
